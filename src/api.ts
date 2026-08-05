@@ -354,7 +354,6 @@ export async function getAvailableSlots(
   return ['09:00 AM', '10:00 AM', '11:00 AM', '01:00 PM', '02:00 PM', '03:00 PM'];
 }
 
-// ✅ FIXED: Get availability for a specific date - handles all response formats
 export async function getAvailability(date: string): Promise<{ date: string; doctorIds: string[] } | null> {
   try {
     const response = await fetch(`${API_BASE_URL}/availability?date=${encodeURIComponent(date)}`);
