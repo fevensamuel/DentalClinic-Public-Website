@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// ✅ HARDCODED for Vercel deployment
+// ✅ Hardcoded for Vercel deployment - use deployed backend URL
 const API_BASE = 'https://dental-clinic-backend-0vjn.onrender.com';
 
 export const API_BASE_URL = `${API_BASE}/api`;
@@ -41,6 +41,7 @@ export async function apiCall<T = any>(endpoint: string, options: RequestInit = 
     });
 
     if (!response.ok) {
+      // Handle 401/403 - auth errors
       if (response.status === 401 || response.status === 403) {
         localStorage.removeItem('dental_portal_auth_token');
         localStorage.removeItem('token');
@@ -51,6 +52,7 @@ export async function apiCall<T = any>(endpoint: string, options: RequestInit = 
       throw new Error(errorData.message || errorData.error || `HTTP ${response.status}`);
     }
 
+    // Handle empty responses
     const text = await response.text();
     return text ? JSON.parse(text) : {};
   } catch (error) {
