@@ -3,29 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// ✅ Determine the API base URL with proper environment detection
-const getApiBase = (): string => {
-  // 1. Check for environment variable first (Vercel, Netlify, etc.)
-  const envUrl = (import.meta as any).env?.VITE_API_URL;
-  if (envUrl) {
-    return envUrl;
-  }
+// ✅ HARDCODED for Vercel deployment
+const API_BASE = 'https://dental-clinic-backend-0vjn.onrender.com';
 
-  // 2. Check if we're in development mode
-  if (import.meta.env?.DEV) {
-    return 'http://localhost:3000';
-  }
+export const API_BASE_URL = `${API_BASE}/api`;
 
-  // 3. Production fallback
-  return 'https://dental-clinic-backend-0vjn.onrender.com';
-};
-
-const API_BASE = getApiBase();
-
-// Ensure the URL doesn't have trailing slash and ends with /api
-export const API_BASE_URL = API_BASE.endsWith('/api') 
-  ? API_BASE 
-  : `${API_BASE.replace(/\/$/, '')}/api`;
+console.log('🔗 API_BASE_URL:', API_BASE_URL);
 
 export function getAuthToken(): string | null {
   return localStorage.getItem('dental_portal_auth_token') || localStorage.getItem('token');
@@ -58,9 +41,7 @@ export async function apiCall<T = any>(endpoint: string, options: RequestInit = 
     });
 
     if (!response.ok) {
-      // Handle 401/403 - auth errors
       if (response.status === 401 || response.status === 403) {
-        // Clear invalid auth token
         localStorage.removeItem('dental_portal_auth_token');
         localStorage.removeItem('token');
         window.dispatchEvent(new Event('unauthorized'));
@@ -70,7 +51,6 @@ export async function apiCall<T = any>(endpoint: string, options: RequestInit = 
       throw new Error(errorData.message || errorData.error || `HTTP ${response.status}`);
     }
 
-    // Handle empty responses
     const text = await response.text();
     return text ? JSON.parse(text) : {};
   } catch (error) {
