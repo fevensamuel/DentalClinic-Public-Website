@@ -1,0 +1,6 @@
+{
+  "name": "Dental Clinic",
+  "description": "A public-facing website for a dental clinic allowing patients to browse services, learn about the clinic, and book appointments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
